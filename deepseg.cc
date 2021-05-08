@@ -454,7 +454,7 @@ int main(int argc, char* argv[]) {
 		exit(1);
 	}
 
-	cv::VideoCapture cap(ccam, CV_CAP_V4L2);
+	cv::VideoCapture cap(0);
 	TFLITE_MINIMAL_CHECK(cap.isOpened());
 
 	cap.set(CV_CAP_PROP_FRAME_WIDTH,  width);
@@ -519,13 +519,15 @@ int main(int argc, char* argv[]) {
 		ti.postns=timestamp();
 
 		// write frame to v4l2loopback as YUYV
-		calcinfo.raw = convert_rgb_to_yuyv(calcinfo.raw);
-		int framesize = calcinfo.raw.step[0]*calcinfo.raw.rows;
-		while (framesize > 0) {
-			int ret = write(lbfd,calcinfo.raw.data,framesize);
-			TFLITE_MINIMAL_CHECK(ret > 0);
-			framesize -= ret;
-		}
+		//calcinfo.raw = convert_rgb_to_yuyv(calcinfo.raw);
+		//int framesize = calcinfo.raw.step[0]*calcinfo.raw.rows;
+		//while (framesize > 0) {
+		cv::imshow("FeepSeg", calcinfo.raw);
+		cv::waitKey(50);
+			//int ret = write(lbfd,calcinfo.raw.data,framesize);
+			//TFLITE_MINIMAL_CHECK(ret > 0);
+			//framesize -= ret;
+		//}
 		ti.v4l2ns=timestamp();
 
 		if (!debug) {
