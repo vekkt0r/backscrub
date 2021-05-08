@@ -1,11 +1,11 @@
 CFLAGS = -Ofast -march=native -fno-trapping-math -fassociative-math -funsafe-math-optimizations -Wall -pthread
-LDFLAGS = -lrt -ldl
+LDFLAGS = -ldl
 
 # TensorFlow
 TFBASE=tensorflow/
 TFLITE=$(TFBASE)/tensorflow/lite/tools/make/
-TFLIBS=$(TFLITE)/gen/linux_x86_64/lib/
-CFLAGS += -I $(TFBASE) -I $(TFLITE)/downloads/absl -I $(TFLITE)/downloads/flatbuffers/include -ggdb
+TFLIBS=$(TFLITE)/gen/osx_x86_64/lib/
+CFLAGS += -I $(TFBASE) -I $(TFLITE)/downloads/absl -I $(TFLITE)/downloads/flatbuffers/include -ggdb -std=c++11
 LDFLAGS += -L $(TFLIBS) -ltensorflow-lite -ldl
 
 # OpenCV

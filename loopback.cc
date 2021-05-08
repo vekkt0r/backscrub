@@ -1,4 +1,4 @@
-#include <linux/videodev2.h>
+//#include <linux/videodev2.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 
@@ -12,6 +12,7 @@
 #include "loopback.h"
 
 void print_format(struct v4l2_format*vid_format) {
+#if 0
 	printf("vid_format->type                = %d\n",	vid_format->type );
 	printf("vid_format->fmt.pix.width       = %d\n",	vid_format->fmt.pix.width );
 	printf("vid_format->fmt.pix.height      = %d\n",	vid_format->fmt.pix.height );
@@ -21,10 +22,11 @@ void print_format(struct v4l2_format*vid_format) {
 	printf("vid_format->fmt.pix.bytesperline= %d\n",	vid_format->fmt.pix.bytesperline );
 	printf("vid_format->fmt.pix.colorspace  = %d\n",	vid_format->fmt.pix.colorspace );
 	printf("\n");
+#endif
 }
 
 int loopback_init(const char* device, int w, int h, int debug) {
-
+#if 0
 	struct v4l2_capability vid_caps;
 	struct v4l2_format vid_format;
 
@@ -71,6 +73,8 @@ int loopback_init(const char* device, int w, int h, int debug) {
 	if (debug) print_format(&vid_format);
 
 	return fdwr;
+#endif
+  return 0;
 }
 
 #ifdef standalone
