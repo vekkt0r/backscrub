@@ -6,9 +6,15 @@ local_repository(
 )
 
 new_local_repository(
-  name = "brew_opencv",
-  path = "/usr/local/opt/opencv",
-  build_file = "opencv.BUILD",
+    name = "linux_opencv",
+    build_file = "opencv_linux.BUILD",
+    path = "/usr",
+)
+
+new_local_repository(
+    name = "macos_opencv",
+    build_file = "opencv_macos.BUILD",
+    path = "/usr/local/opt/opencv",
 )
 
 # All of the stuffs below are just copied from tensorflow/WORKSPACE and slightly adapted.
