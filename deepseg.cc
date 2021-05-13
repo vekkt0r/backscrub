@@ -213,7 +213,7 @@ void init_tensorflow(calcinfo_t &info) {
 	// get input and output tensor as cv::Mat
 	info.input = getTensorMat(interpreter->inputs ()[0],info.debug);
 	info.output = getTensorMat(interpreter->outputs()[0],info.debug);
-	info.ratio = (float)info.input.cols/(float) info.input.rows;
+	info.ratio = (float)info.input.rows/(float) info.input.cols;
 
 	// initialize mask and square ROI in center
 	info.roidim = cv::Rect((info.width-info.height/info.ratio)/2,0,info.height/info.ratio,info.height);
