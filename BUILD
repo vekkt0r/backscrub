@@ -11,7 +11,7 @@ cc_binary(
   }),
   deps =
     select({
-      "@platforms//os:osx": ["@org_tensorflow//tensorflow/lite:libtensorflowlite.so"],
+      "@platforms//os:osx": ["@org_tensorflow//tensorflow/lite:libtensorflowlite.dylib"],
       "@platforms//os:linux": ["@org_tensorflow//tensorflow/lite:libtensorflowlite.so"]}) + [
     "@org_tensorflow//tensorflow/lite/kernels:builtin_ops",
     "@brew_opencv//:opencv",
