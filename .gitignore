@@ -31,6 +31,11 @@
 *.out
 *.app
 
+# Bazel
+bazel-bin
+bazel-out
+bazel-testlogs
+
 deepseg
 models/body-pix/bodypix_*
 tv
