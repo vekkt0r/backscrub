@@ -16,6 +16,7 @@ limitations under the License.
 #include <cstdio>
 #include <chrono>
 #include <string>
+#include <memory>
 
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/kernels/register.h"
@@ -140,7 +141,7 @@ long diffnanosecs(timestamp_t t1, timestamp_t t2) {
 
 // threaded capture shared state
 typedef struct {
-	cv::VideoCapture *cap;
+	std::unique_ptr<cv::VideoCapture> cap;
 	cv::Mat *grab;
 	cv::Mat *raw;
 	int64 cnt;
@@ -454,14 +455,17 @@ int main(int argc, char* argv[]) {
 		exit(1);
 	}
 
-	cv::VideoCapture cap(ccam, CV_CAP_V4L2);
-	TFLITE_MINIMAL_CHECK(cap.isOpened());
+	// Use CV only capture if ccam is number (MacOS)
+	auto cap = isdigit(ccam[0])
+		? std::make_unique<cv::VideoCapture>('0' - ccam[0])
+		: std::make_unique<cv::VideoCapture>(ccam, CV_CAP_V4L2);
+	TFLITE_MINIMAL_CHECK(cap->isOpened());
 
-	cap.set(CV_CAP_PROP_FRAME_WIDTH,  width);
-	cap.set(CV_CAP_PROP_FRAME_HEIGHT, height);
+	cap->set(CV_CAP_PROP_FRAME_WIDTH,  width);
+	cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
 	if (fourcc)
-		cap.set(CV_CAP_PROP_FOURCC, fourcc);
-	cap.set(CV_CAP_PROP_CONVERT_RGB, true);
+		cap->set(CV_CAP_PROP_FOURCC, fourcc);
+	cap->set(CV_CAP_PROP_CONVERT_RGB, true);
 
 	calcinfo_t calcinfo = { modelname, threads, width, height, debug };
 	init_tensorflow(calcinfo);
@@ -471,7 +475,7 @@ int main(int argc, char* argv[]) {
 	cv::Mat buf1;
 	cv::Mat buf2;
 	int64 oldcnt = 0;
-	capinfo_t capinfo = { &cap, &buf1, &buf2, 0, &ti, PTHREAD_MUTEX_INITIALIZER };
+	capinfo_t capinfo = { std::move(cap), &buf1, &buf2, 0, &ti, PTHREAD_MUTEX_INITIALIZER };
 	if (pthread_create(&grabber, NULL, grab_thread, &capinfo)) {
 		perror("creating grabber thread");
 		exit(1);

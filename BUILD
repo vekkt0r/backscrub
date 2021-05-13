@@ -16,4 +16,8 @@ cc_binary(
     "@org_tensorflow//tensorflow/lite/kernels:builtin_ops",
     "@brew_opencv//:opencv",
   ],
+  copts = [
+    "-std=c++14",
+    "-Ofast", "-march=native", "-fno-trapping-math -fassociative-math -funsafe-math-optimizations -Wall"
+  ],
 )
