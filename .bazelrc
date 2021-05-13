@@ -1,2 +1,5 @@
 # Needed to avoid warnings from TF bazel
 common --experimental_repo_remote_exec
+
+# XNNPACK is 2x faster
+common --define tflite_with_xnnpack=true
